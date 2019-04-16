@@ -13,125 +13,121 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class GlobalEmailTransaction {
-	private final String endpoint;
-	private GlobalEmailOptions options;
-	private String identNumber;
-	private String email;
-	private String format;
+    private final String endpoint;
+    private GlobalEmailOptions options;
+    private String identNumber;
+    private String email;
+    private String format;
 
-	public GlobalEmailTransaction() {
-		endpoint = "https://globalemail.melissadata.net/v4/WEB/GlobalEmail/doGlobalEmail?";
-		options = new GlobalEmailOptions();
-		identNumber = "";
-		email = "";
-		format = "";
-	}
+    public GlobalEmailTransaction(){
+        endpoint    = "https://globalemail.melissadata.net/v3/WEB/GlobalEmail/doGlobalEmail?";
+        options     = new GlobalEmailOptions();
+        identNumber = "";
+        email       = "";
+        format      = "";
+    }
 
-	public String processTransaction(String request) {
-		String response = "";
-		URI uri;
-		URL url;
-		try {
-			uri = new URI(request);
-			url = new URL(uri.toURL().toString());
+    public String processTransaction(String request) {
+        String response = "";
+        URI uri;
+        URL url;
+        try {
+            uri = new URI(request);
+            url = new URL(uri.toURL().toString());
 
-			HttpURLConnection urlConn = (HttpURLConnection) (url.openConnection());
+            HttpURLConnection urlConn = (HttpURLConnection)(url.openConnection());
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
 
-			StringReader reader;
-			StringWriter writer = new StringWriter();
-			StringBuilder jsonResponse = new StringBuilder();
-			String inputLine = "";
+            StringReader reader;
+            StringWriter writer = new StringWriter();
+            StringBuilder jsonResponse = new StringBuilder();
+            String inputLine = "";
 
-			if (format.equals("JSON")) {
-				while ((inputLine = in.readLine()) != null) {
-					jsonResponse.append(inputLine);
-				}
-				@SuppressWarnings("deprecation")
-				JSONObject test = new JSONObject(jsonResponse.toString());
-				response = test.toString(10);
-			} else {
+            if (format.equals("JSON"))
+            {
+                while ((inputLine = in.readLine()) != null) {
+                    jsonResponse.append(inputLine);
+                }
+                @SuppressWarnings("deprecation")
+                JSONObject test = new JSONObject(jsonResponse.toString());
+                response = test.toString(10);
+            } else {
 
-				String xmlLine = "";
-				String xmlString = "";
+                String xmlLine = "";
+                String xmlString = "";
 
-				while ((xmlLine = in.readLine()) != null) {
-					xmlString += xmlLine + "\n";
-				}
+                while((xmlLine = in.readLine()) != null) {
+                    xmlString += xmlLine + "\n";
+                }
 
-				TransformerFactory tf = TransformerFactory.newInstance();
-				Transformer t = tf.newTransformer();
-				t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "10");
-				t.setOutputProperty(OutputKeys.INDENT, "yes");
+                TransformerFactory tf = TransformerFactory.newInstance();
+                Transformer t = tf.newTransformer();
+                t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "10");
+                t.setOutputProperty(OutputKeys.INDENT, "yes");
 
-				reader = new StringReader(xmlString);
-				try {
-					t.transform(new javax.xml.transform.stream.StreamSource(reader),
-							new javax.xml.transform.stream.StreamResult(writer));
-				} catch (TransformerException e) {
-					e.printStackTrace();
-				}
-				response = writer.toString();
+                reader = new StringReader(xmlString);
+                try {
+                    t.transform(new javax.xml.transform.stream.StreamSource(reader), new javax.xml.transform.stream.StreamResult(writer));
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                }
+                response = writer.toString();
 
-			}
-		} catch (Exception e) {
-			System.out.println("Error sending request: \n" + e);
-		}
-		return response;
-	}
 
-	public String generateRequestString() {
-		String request = "";
-		request = endpoint;
-		try {
-			request += "&id=" + URLEncoder.encode(getIdentNumber(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			System.out.println("Unsupported Encoding Exception: " + e);
-		}
-		
-		request += "&opt=" + options.generateOptionString();
-		try {
-			if (!getEmail().equals(""))
-				request += "&email=" + URLEncoder.encode(getEmail(), "UTF-8");
+            }
+        } catch (Exception e){
+            System.out.println("Error sending request: \n" + e);
+        }
+        return response;
+    }
 
-		} catch (UnsupportedEncodingException e) {
-			System.out.println("Unsupported Encoding Exception: " + e);
-		}
-		request += "&format=" + getFormat();
+    public String generateRequestString() {
+        String request = "";
+        request = endpoint;
+        request += "&id=" + getIdentNumber();
+        request += "&opt=" + options.generateOptionString();
+        try {
+            if(!getEmail().equals(""))
+                request += "&email=" + URLEncoder.encode(getEmail(), "UTF-8");
 
-		return request;
-	}
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Unsupported Encoding Exception: " +e);
+        }
+        request += "&format=" + getFormat();
 
-	public GlobalEmailOptions getOptions() {
-		return options;
-	}
+        return request;
+    }
 
-	public void setOptions(GlobalEmailOptions options) {
-		this.options = options;
-	}
+    public GlobalEmailOptions getOptions() {
+        return options;
+    }
 
-	public String getIdentNumber() {
-		return identNumber;
-	}
+    public void setOptions(GlobalEmailOptions options) {
+        this.options = options;
+    }
 
-	public void setIdentNumber(String identNumber) {
-		this.identNumber = identNumber;
-	}
+    public String getIdentNumber() {
+        return identNumber;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setIdentNumber(String identNumber) {
+        this.identNumber = identNumber;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getFormat() {
-		return format;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setFormat(String format) {
-		this.format = format;
-	}
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
 }
