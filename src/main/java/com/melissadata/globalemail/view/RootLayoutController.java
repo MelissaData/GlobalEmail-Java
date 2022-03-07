@@ -1,9 +1,9 @@
-package melissadata.globalemail.view;
+package com.melissadata.globalemail.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import melissadata.globalemail.Main;
+import com.melissadata.globalemail.Main;
 
 public class RootLayoutController {
     // Reference to the main application

@@ -1,4 +1,4 @@
-package melissadata.globalemail;
+package com.melissadata.globalemail;
 
 import java.io.IOException;
 
@@ -7,19 +7,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import melissadata.globalemail.view.GlobalEmailController;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import melissadata.globalemail.view.RootLayoutController;
+import com.melissadata.globalemail.view.GlobalEmailController;
+import com.melissadata.globalemail.view.RootLayoutController;
 
 public class Main extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
-    @Override
+
     public void start(Stage primaryStage) {
         try {
             this.primaryStage = primaryStage;
-            this.primaryStage.setTitle("Business Search Java Sample Application");
+            this.primaryStage.setTitle("Global Email Java Sample Application");
 
             initRootLayout();
 
@@ -33,7 +31,7 @@ public class Main extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/RootLayout.fxml"));
+            loader.setLocation(Main.class.getResource("RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
 
             // Show the scene containing the root layout.
@@ -57,7 +55,7 @@ public class Main extends Application {
         try {
             // Load Global Email overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/globalemail.fxml"));
+            loader.setLocation(Main.class.getResource("GlobalEmail.fxml"));
             BorderPane businessSearch = (BorderPane) loader.load();
 
             // Set Global Email
